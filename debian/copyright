@@ -3,9 +3,138 @@ Source: https://github.com/neovim/neovim
 Upstream-Name: neovim
 
 Files: *
-Copyright: ...
-License: ...
+Copyright:
+ 2019, Agilent Technologies, Inc
+ 2014-2020, Apple Inc. and the Swift project authors
+ 2001, Bohdan Vlasyuk <bohdan@vstu.edu.ua>
+ 1988, Bram
+ 2013, Bruno Sutic
+ 1999-2021, Charles E. Campbell
+ 2004, Chris Larson <kergoth@handhelds.org>
+ Christian Jacobsen <clj3@kent.ac.uk>
+ Cool Cats
+ Dan Taylor
+ 2019-2022, Emir SARI <emir_sari@icloud.com>
+ 2003-2012, Ernest Adrogué <eadrogue@gmx.net>
+ 2017-2019, Eugene Ciurana / pr3d4t0r. Licensed
+ Fred Barnes <frmb2@kent.ac.uk>
+ 2003-2007, Free Software Foundation, Inc
+ Gaspar Sinai <gsinai@yudit.org>
+ 2012-2016, Hong Xu
+ 1998, Interactive Software Engineering
+ Jan-Oliver Wagner
+ Joseph Hager <ajhager@gmail.com>
+ Joyent, Inc. and other Node contributors.
+ 2005, Kepler Project
+ 2007-2023, Lua.org, PUC-Rio
+ 2001-2023, MURAOKA Taro <koron.kaoriya@gmail.com>
+ Mario Schweigler <ms44@kent.ac.uk>
+ 2006, Martin Krischik
+ 2002, Michael C. Toren <mct@toren.net>
+ 2004-2020, Michael Geddes
+ 2008-2012, Mike Pall
+ Neovim contributors
+ 2015, Nikolay Pavlov
+ 2008, Ricardo Salveti <rsalveti@rsalveti.net>
+ 2008-2013, Rufus Cable
+ 2009-2013, Steven Oliver
+ 2018, The Vim authors
+License: Apache-2 or Vim
 
 Files: debian/*
 Copyright: 2025, Dimitry Ishenko <dimitry.ishenko@gmail.com>
 License: GPL-2+
+
+Files: 
+ runtime/compiler/pip_compile.vim
+ runtime/doc/luaref.txt
+ runtime/ftplugin/requirements.vim
+ runtime/lua/vim/inspect.lua
+ runtime/syntax/json.vim
+ runtime/syntax/requirements.vim
+ src/bit.c
+ src/cjson/fpconv.c
+ src/cjson/lua_cjson.c
+ src/cjson/strbuf.c
+ src/cjson/strbuf.h
+ src/klib/*
+ test/unit/formatc.lua
+Copyright:
+ 2008, Attractive Chaos <attractor@live.co.uk>
+ 2013, Enrique García Cota
+ 2013, Jeroen Ruigrok van der Werven, Eli Parra
+ 1994-2006, Lua.org, PUC-Rio
+ 2006, Luis Carvalho
+ 2010-2012, Mark Pulford <mark@kyne.com.au>
+ 2008-2012, Mike Pall
+ 2009, Peter "Corsix" Cawley
+ 2015, raimon
+License: Expat
+
+Files:
+ runtime/doc/dev_style.txt
+ runtime/doc/dev_theme.txt
+License: CC-BY
+
+Files: runtime/doc/uganda.txt
+License: Vim
+
+Files: runtime/nvim.appdata.xml
+Copyright: 2018, Neovim contributors
+License: CC0
+
+Files: runtime/syntax/go.vim
+Copyright: 2009, The Go Authors
+License: BSD
+
+Files: runtime/syntax/initng.vim
+License: GPL-2
+
+Files: runtime/syntax/poke.vim
+Copyright: 2021, Matthew T. Ihlenfield
+License: GPL-3+
+
+Files:
+ runtime/syntax/proto.vim
+ src/clint.py
+Copyright: 2008-2009, Google Inc
+License: BSD-3-clause
+
+Files: runtime/syntax/thrift.vim
+License: Apache-2
+
+Files: src/mpack/*
+Copyright: 2016, Thiago de Arruda
+License: Expat
+
+Files: src/nvim/lib/*
+Copyright: 2013, Ben Noordhuis <info@bnoordhuis.nl>
+License: ISC
+
+Files: src/nvim/marktree.c
+Copyright:
+ 2008-2009, Attractive Chaos <attractor@live.co.uk>
+ 1997-2001, John-Mark Gurney
+License: BSD-2-clause
+
+Files: src/nvim/regexp.c
+Copyright: 1986, University of Toronto
+License: Spencer-86
+
+Files: src/nvim/sha256.c
+License: GPL
+
+Files: src/nvim/vterm/*
+Copyright: 2008, Paul Evans <leonerd@leonerd.org.uk>
+License: Expat
+
+Files: src/xdiff/*
+Copyright:
+ 2003, Davide Libenzi
+ 2003-2016, Davide Libenzi, Johannes E. Schindelin
+ 1991-1999, Free Software Foundation, Inc
+License: LGPL-2.1+
+
+Files: src/xdiff/xhistogram.c
+Copyright: 2010, Google Inc
+License: BSD-3-clause
