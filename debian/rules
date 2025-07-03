@@ -10,7 +10,7 @@ ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
   BUILD_TYPE = Debug
 endif
 
-GRAMMARS = c lua markdown markdown-inline query vim vimdoc
+GRAMMARS = c lua markdown markdown_inline query vim vimdoc
 PARSERS := $(addprefix debian/parsers/, $(addsuffix .so, $(GRAMMARS)))
 
 override_dh_auto_configure:
@@ -22,7 +22,12 @@ override_dh_auto_build: $(PARSERS)
 debian/parsers/%.so:
 	@echo "-- Generating parser for $*"
 	@mkdir -p debian/parsers
-	$(CC) $(CFLAGS) -shared -o $@ -Wl,--whole-archive $(shell pkgconf --variable=libdir tree-sitter-$*)/libtree-sitter-$*.a -Wl,--no-whole-archive
+	ar=$(shell pkgconf --variable=libdir tree-sitter-$(subst _,-,$*))/libtree-sitter-$(subst _,-,$*).a \
+	$(CC) $(CFLAGS) -shared -o $@ -Wl,--whole-archive $$ar -Wl,--no-whole-archive
 
 override_dh_auto_test:
 	# TODO
+
+override_dh_auto_clean:
+	rm -r debian/parsers || true
+	dh_auto_clean
