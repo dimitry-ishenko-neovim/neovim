@@ -1,0 +1,11 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Source: https://github.com/neovim/neovim
+Upstream-Name: neovim
+
+Files: *
+Copyright: ...
+License: ...
+
+Files: debian/*
+Copyright: 2025, Dimitry Ishenko <dimitry.ishenko@gmail.com>
+License: GPL-2+

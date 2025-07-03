@@ -1,0 +1,82 @@
+Source: neovim
+Section: editors
+Priority: optional
+Maintainer: Dimitry Ishenko <dimitry.ishenko@gmail.com>
+Rules-Requires-Root: no
+Build-Depends:
+ cmake (>= 3.16),
+ debhelper-compat (= 13),
+ libluajit-5.1-dev,
+ libtree-sitter-dev (>= 0.25.0),
+ libtree-sitter-c-dev (>= 0.23.4),
+ libtree-sitter-lua-dev (>= 0.3.0),
+ libtree-sitter-markdown-dev (>= 0.4.1),
+ libtree-sitter-markdown-inline-dev (>= 0.4.1),
+ libtree-sitter-query-dev (>= 0.5.1),
+ libtree-sitter-vim-dev (>= 0.5.0),
+ libtree-sitter-vimdoc-dev (>= 3.0.1),
+ libunibilium-dev (>= 2.0),
+ libutf8proc-dev (>= 2.10.0),
+ libuv1-dev,
+ lua-lpeg (>= 1.0.2),
+ lua-luv-dev (>= 1.43.0),
+ lua5.1,
+ luajit,
+ pkgconf,
+Standards-Version: 4.6.2
+Homepage: https://neovim.io/
+Vcs-Browser: https://github.com/neovim/neovim
+Vcs-Git: https://github.com/neovim/neovim.git
+
+Package: neovim
+Architecture: any
+Depends:
+ neovim-runtime (= ${source:Version}),
+ ${shlibs:Depends},
+ ${misc:Depends},
+Recommends: python3-pynvim (>= 0.5.2~), xclip | xsel | wl-clipboard, xxd
+Suggests: ctags
+Provides: editor
+Description: Vim-based text editor engineered for extensibility and usability
+ Neovim is a refactor, and sometimes redactor, in the tradition of Vim. It is
+ not a rewrite but a continuation and extension of Vim. Many clones and
+ derivatives exist, some very clever - but none are Vim. Neovim is built for
+ users who want the good parts of Vim, and more.
+ .
+ Goals:
+ - Retain the character of Vim - fast, versatile, quasi-minimal.
+ - Enable new contributors, remove barriers to entry.
+ - Unblock plugin authors.
+ - Deliver a first-class Lua interface, as an alternative to Vimscript.
+ - Favor composability instead of new, incompatible concepts.
+ - Leverage ongoing Vim development.
+ - Optimize "out of the box", for new users but especially regular users.
+ - Deliver a consistent cross-platform experience, targeting all
+   libuv-supported platforms.
+ - In matters of taste/ambiguity, favor tradition/compatibility...
+ - ...but prefer usability if the benefits are extreme.
+
+Package: neovim-runtime
+Architecture: all
+Depends: ${misc:Depends}
+Multi-Arch: foreign
+Description: Vim-based text editor engineered for extensibility and usability
+ Neovim is a refactor, and sometimes redactor, in the tradition of Vim. It is
+ not a rewrite but a continuation and extension of Vim. Many clones and
+ derivatives exist, some very clever - but none are Vim. Neovim is built for
+ users who want the good parts of Vim, and more.
+ .
+ Goals:
+ - Retain the character of Vim - fast, versatile, quasi-minimal.
+ - Enable new contributors, remove barriers to entry.
+ - Unblock plugin authors.
+ - Deliver a first-class Lua interface, as an alternative to Vimscript.
+ - Favor composability instead of new, incompatible concepts.
+ - Leverage ongoing Vim development.
+ - Optimize "out of the box", for new users but especially regular users.
+ - Deliver a consistent cross-platform experience, targeting all
+   libuv-supported platforms.
+ - In matters of taste/ambiguity, favor tradition/compatibility...
+ - ...but prefer usability if the benefits are extreme.
+ .
+ This package contains architecture-independent runtime files used by Neovim.
