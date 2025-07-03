@@ -1,5 +1,221 @@
-neovim (0.11.2-1) UNRELEASED; urgency=medium
+neovim (0.11.2-1) unstable; urgency=medium
 
-  * Initial release.
+  [ Dimitry Ishenko ]
+  * d/copyright: update
+  * Add Debian packaging
 
- -- Dimitry Ishenko <dimitry.ishenko@gmail.com>  Mon, 30 Jun 2025 15:52:02 -0400
+  [ bfredl ]
+  * NVIM 0.11.2
+
+  [ Christian Clason ]
+  * fix(treesitter): parser metadata annotations
+
+  [ Lewis Russell ]
+  * fix(vim.system): improve error message when cwd does not exist
+
+  [ Sean Dewar ]
+  * fix(folds): adjust filler text drawing for transparent folds
+
+  [ zeertzjq ]
+  * vim-patch:9.1.1407: Can't use getpos('v') in OptionSet when using
+    setbufvar() (#34177)
+  * Merge pull request #34168 from zeertzjq/backport
+  * fix(system): don't treat NUL at start as no input (#34167)
+
+  [ luukvbaal ]
+  * fix(move): consume skipcol before revealing filler lines (#34143)
+
+  [ zeertzjq ]
+  * vim-patch:9.1.1405: tests: no test for mapping with special keys in
+    session file (#34146)
+  * vim-patch:9.1.1402: multi-byte mappings not properly stored in
+    session file (#34131)
+
+  [ Evan Hahn ]
+  * fix(lsp): fix error with InsertReplaceEdit events #33973
+
+  [ Phạm Bình An ]
+  * docs(tutor): move lesson 7.2 below lesson 7.3 #33662
+  * vim-patch:5a8f995: runtime(doc): remove outdated Contribution
+    section in pi_tutor (#34094)
+
+  [ zeertzjq ]
+  * vim-patch:9.1.1395: search_stat not reset when pattern differs in
+    case (#34058)
+  * fix(:print): don't use schar_from_ascii() for illegal byte (#34046)
+  * fix(tui): clear primary device callback before invoking it (#34032)
+
+  [ luukvbaal ]
+  * vim-patch:9.1.1388: Scrolling one line too far with 'nosmoothscroll'
+    page scrolling (#34023)
+
+  [ Sean Dewar ]
+  * vim-patch:9.1.1387: memory leak when buflist_new() fails to reuse
+    curbuf
+
+  [ neovim-backports[bot] ]
+  * vim-patch:9.1.1385: inefficient loop for 'nosmoothscroll' scrolling
+    (#33992)
+
+  [ luukvbaal ]
+  * vim-patch:9.1.1297: Ctrl-D scrolling can get stuck #33453
+
+  [ brianhuster ]
+  * fix(tutor): l:lang is undefined
+  * vim-patch:9.1.1384: still some problem with the new tutors filetype
+    plugin
+  * vim-patch:3704b5b: runtime(tutor): improve tutor.vim plugin and
+    filetype plugin
+
+  [ Sean Dewar ]
+  * vim-patch:9.1.1380: 'eventignorewin' only checked for current buffer
+  * vim-patch:9.1.1376: quickfix dummy buffer may remain as dummy buffer
+  * vim-patch:9.1.1375: [security]: possible heap UAF with quickfix
+    dummy buffer
+
+  [ Riley Bruins ]
+  * fix(treesitter): proper tree `contains()` logic with combined
+    injections
+
+  [ Sean Dewar ]
+  * vim-patch:9.1.1361: [security]: possible use-after-free when closing
+    a buffer (#33820)
+
+  [ zeertzjq ]
+  * fix(folds): avoid unnecessary loop with horizontal scrolling
+    (#33932)
+
+  [ Sean Dewar ]
+  * fix(terminal): check size when switching buffers
+
+  [ Artem ]
+  * fix(decor): extmark highlight not applied (#33858)
+
+  [ zeertzjq ]
+  * test(swapfile): don't check for line with full file path (#33896)
+
+  [ Phạm Bình An ]
+  * fix(runtime): 'includeexpr' with non-Nvim-style Lua modules #33867
+
+  [ Riley Bruins ]
+  * fix(treesitter): eliminate flicker for single windows #33842
+
+  [ gcrtnst ]
+  * fix(termkey): out-of-bounds write in array #33868
+
+  [ Justin M. Keyes ]
+  * fix(lua): vim.validate `message` param #33675
+
+  [ zeertzjq ]
+  * test(lua/secure_spec): avoid magic number (#33700)
+
+  [ Eike ]
+  * fix(lsp): check if client is stopping before reuse #33796
+
+  [ glepnir ]
+  * fix(lsp): improve error completion message #33812
+  * fix(lsp): only auto-detach lsp.config clients #33834
+
+  [ luukvbaal ]
+  * fix(treesitter): invalidate conceal_lines marks (#33832)
+
+  [ Phạm Bình An ]
+  * docs: default mappings #33706
+
+  [ Jeremy Fleischman ]
+  * feat(lsp): detach LSP clients when 'filetype' changes #33707
+
+  [ PRIZ ;] ]
+  * docs(lua): typing for vim.fn.winlayout #33817
+
+  [ Sean Dewar ]
+  * fix(window): skip unfocusable and hidden floats with "{count}<C-W>w"
+    #33810
+
+  [ Jeremy Fleischman ]
+  * feat(lsp): vim.lsp.is_enabled() #33703
+
+  [ Sean Dewar ]
+  * docs: fixups (#33815)
+
+  [ Michele Campeotto ]
+  * fix(runtime): conceal paths in help, man ToC loclist #33764
+
+  [ Riley Bruins ]
+  * fix(lsp): improper diagnostic end_col computation
+
+  [ zeertzjq ]
+  * fix(tui): don't try to add unsupported modifiers (#33799)
+  * docs: add missing change to getcharstr() signature (#33797)
+
+  [ Maria José Solano ]
+  * fix(lsp): use `bufnr` when getting clients in `symbols_to_items`
+    (#33760)
+
+  [ Christian Clason ]
+  * fix(treesitter): close `:InspectTree` with `q`
+
+  [ zeertzjq ]
+  * fix(tui): forward C0 control codes literally (#33759)
+
+  [ Phạm Bình An ]
+  * fix(vim.lsp.enable): don't eagerly enable LSP configs during startup
+    #33762
+
+  [ luukvbaal ]
+  * fix(display): adjust setting winline info for concealed lines
+    (#33717)
+
+  [ Jeremy Fleischman ]
+  * feat(lsp): start/stop LSPs as necessary during vim.lsp.enable()
+    #33702
+  * fix(trust): support for trusting directories #33735
+
+  [ luukvbaal ]
+  * fix(cmdline): do not move UI cursor when entering cmdline #33729
+
+  [ Justin M. Keyes ]
+  * Merge #33734 from justinmk/release
+
+  [ Lorenzo Bellina ]
+  * feat(lsp): `root_markers` can control priority
+
+  [ Justin M. Keyes ]
+  * test: drop redundant clear() #33654
+  * test: drop redundant clear() #33647
+  * docs: lsp, lua #33682
+
+  [ zeertzjq ]
+  * fix(tui): don't process UI events when suspending or stopping
+    (#33710)
+
+  [ Justin M. Keyes ]
+  * Revert "fix(desktop): cannot open filename with spaces using OS file
+    manager" #33684
+  * docs: lsp, emoji, startup #33683
+  * Merge pull request #33680 from justinmk/release
+
+  [ Yochem van Rosmalen ]
+  * feat(health): summary in section heading #33388
+
+  [ Justin M. Keyes ]
+  * feat(checkhealth): trigger FileType event after showing report
+  * docs: backport #33549 and #33524 to 0.11 (#33678)
+
+  [ Phạm Bình An ]
+  * docs: provide example_init.lua #33524
+
+  [ brianhuster ]
+  * vim-patch:829eda7: runtime(new-tutor): update tutor and correct
+    comandline completion
+
+  [ Phạm Bình An ]
+  * fix(runtime): cpoptions is reset in Lua file #33671
+
+  [ Bartłomiej Maryńczak ]
+  * fix(lsp): detect if Client:request resolved synchronously #33624
+
+  [ Andre Toerien ]
+  * fix(health): checkhealth float opens extra empty buffer #33648
+
+ -- Dimitry Ishenko <dimitry.ishenko@gmail.com>  Thu, 03 Jul 2025 01:36:52 -0400
