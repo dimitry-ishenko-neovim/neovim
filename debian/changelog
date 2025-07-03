@@ -1,3 +1,9 @@
+neovim (0.11.2-2) unstable; urgency=medium
+
+  * d/rules: fix markdown_inline parser name
+
+ -- Dimitry Ishenko <dimitry.ishenko@gmail.com>  Thu, 03 Jul 2025 02:31:12 -0400
+
 neovim (0.11.2-1) unstable; urgency=medium
 
   [ Dimitry Ishenko ]
