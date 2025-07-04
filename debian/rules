@@ -3,15 +3,13 @@ export DH_VERBOSE = 1
 %:
 	dh $@ --buildsystem=cmake
 
-include /usr/share/dpkg/buildflags.mk
-
 BUILD_TYPE = Release
 ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
   BUILD_TYPE = Debug
 endif
 
 GRAMMARS = c lua markdown markdown_inline query vim vimdoc
-PARSERS := $(addprefix debian/parsers/, $(addsuffix .so, $(GRAMMARS)))
+PARSERS := $(addprefix debian/parser/, $(addsuffix .so, $(GRAMMARS)))
 
 override_dh_auto_configure:
 	dh_auto_configure -- -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -DUSE_BUNDLED_BUSTED=OFF
@@ -19,15 +17,14 @@ override_dh_auto_configure:
 override_dh_auto_build: $(PARSERS)
 	dh_auto_build
 
-debian/parsers/%.so:
+debian/parser/%.so:
 	@echo "-- Generating parser for $*"
-	@mkdir -p debian/parsers
-	ar=$(shell pkgconf --variable=libdir tree-sitter-$(subst _,-,$*))/libtree-sitter-$(subst _,-,$*).a \
-	$(CC) $(CFLAGS) -shared -o $@ -Wl,--whole-archive $$ar -Wl,--no-whole-archive
+	@mkdir -p debian/parser
+	$(CC) -shared -o $@ -Wl,--whole-archive $(shell pkgconf --variable=libdir tree-sitter-$(subst _,-,$*))/libtree-sitter-$(subst _,-,$*).a -Wl,--no-whole-archive
 
 override_dh_auto_test:
 	# TODO
 
 override_dh_auto_clean:
-	rm -r debian/parsers || true
+	rm -r debian/parser || true
 	dh_auto_clean
