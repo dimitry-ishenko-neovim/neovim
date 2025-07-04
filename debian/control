@@ -44,17 +44,17 @@ Description: Vim-based text editor engineered for extensibility and usability
  users who want the good parts of Vim, and more.
  .
  Goals:
- - Retain the character of Vim - fast, versatile, quasi-minimal.
- - Enable new contributors, remove barriers to entry.
- - Unblock plugin authors.
- - Deliver a first-class Lua interface, as an alternative to Vimscript.
- - Favor composability instead of new, incompatible concepts.
- - Leverage ongoing Vim development.
- - Optimize "out of the box", for new users but especially regular users.
- - Deliver a consistent cross-platform experience, targeting all
-   libuv-supported platforms.
- - In matters of taste/ambiguity, favor tradition/compatibility...
- - ...but prefer usability if the benefits are extreme.
+   * Retain the character of Vim - fast, versatile, quasi-minimal.
+   * Enable new contributors, remove barriers to entry.
+   * Unblock plugin authors.
+   * Deliver a first-class Lua interface, as an alternative to Vimscript.
+   * Favor composability instead of new, incompatible concepts.
+   * Leverage ongoing Vim development.
+   * Optimize "out of the box", for new users but especially regular users.
+   * Deliver a consistent cross-platform experience, targeting all
+   * libuv-supported platforms.
+   * In matters of taste/ambiguity, favor tradition/compatibility...
+   * ...but prefer usability if the benefits are extreme.
 
 Package: neovim-runtime
 Architecture: all
@@ -67,16 +67,16 @@ Description: Vim-based text editor engineered for extensibility and usability
  users who want the good parts of Vim, and more.
  .
  Goals:
- - Retain the character of Vim - fast, versatile, quasi-minimal.
- - Enable new contributors, remove barriers to entry.
- - Unblock plugin authors.
- - Deliver a first-class Lua interface, as an alternative to Vimscript.
- - Favor composability instead of new, incompatible concepts.
- - Leverage ongoing Vim development.
- - Optimize "out of the box", for new users but especially regular users.
- - Deliver a consistent cross-platform experience, targeting all
-   libuv-supported platforms.
- - In matters of taste/ambiguity, favor tradition/compatibility...
- - ...but prefer usability if the benefits are extreme.
+   * Retain the character of Vim - fast, versatile, quasi-minimal.
+   * Enable new contributors, remove barriers to entry.
+   * Unblock plugin authors.
+   * Deliver a first-class Lua interface, as an alternative to Vimscript.
+   * Favor composability instead of new, incompatible concepts.
+   * Leverage ongoing Vim development.
+   * Optimize "out of the box", for new users but especially regular users.
+   * Deliver a consistent cross-platform experience, targeting all
+   * libuv-supported platforms.
+   * In matters of taste/ambiguity, favor tradition/compatibility...
+   * ...but prefer usability if the benefits are extreme.
  .
  This package contains architecture-independent runtime files used by Neovim.
