@@ -1,3 +1,10 @@
+neovim (0.11.2-4) unstable; urgency=medium
+
+  * Add termdebug patch
+  * d/control: tweak
+
+ -- Dimitry Ishenko <dimitry.ishenko@gmail.com>  Sun, 06 Jul 2025 18:44:48 -0400
+
 neovim (0.11.2-3) unstable; urgency=medium
 
   * debian: fix parser path
