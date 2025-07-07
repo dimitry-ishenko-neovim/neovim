@@ -1,3 +1,9 @@
+neovim (0.11.2-5) unstable; urgency=medium
+
+  * Update termdebug patch
+
+ -- Dimitry Ishenko <dimitry.ishenko@gmail.com>  Sun, 06 Jul 2025 22:31:09 -0400
+
 neovim (0.11.2-4) unstable; urgency=medium
 
   * Add termdebug patch
