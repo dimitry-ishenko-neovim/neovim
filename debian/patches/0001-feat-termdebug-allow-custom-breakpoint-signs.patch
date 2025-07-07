@@ -1,0 +1,62 @@
+From e6be9887a4f45a8e88394244c123cb01f81307b6 Mon Sep 17 00:00:00 2001
+From: Dimitry Ishenko <dimitry.ishenko@gmail.com>
+Date: Mon, 7 Jul 2025 12:06:19 -0400
+Subject: [PATCH] feat(termdebug): allow custom breakpoint signs
+
+For example, one can do something like this:
+
+```vim
+let g:termdebug_config['signs'] = ['>1', '>2', '>3', '>4', '>5', '>6', '>7', '>8', '>9']
+let g:termdebug_config['sign'] = '>>'
+```
+
+where the first 9 breakpoints will have their own signs and the rest
+will be the same (>>).
+---
+ runtime/doc/terminal.txt                      |  3 +++
+ .../dist/opt/termdebug/plugin/termdebug.vim   | 21 ++++++++++++-------
+ 2 files changed, 17 insertions(+), 7 deletions(-)
+
+--- neovim-0.11.2.orig/runtime/doc/terminal.txt
++++ neovim-0.11.2/runtime/doc/terminal.txt
+@@ -657,6 +657,9 @@ than 99 will be displayed as "9+".
+ 
+ If you want to customize the breakpoint signs to show `>>` in the signcolumn: >vim
+ 	let g:termdebug_config['sign'] = '>>'
++You can also specify individual signs for the first several breakpoints: >vim
++	let g:termdebug_config['signs'] = ['>1', '>2', '>3', '>4', '>5', '>6', '>7', '>8', '>9']
++	let g:termdebug_config['sign'] = '>>'
+ If you would like to use decimal (base 10) breakpoint signs: >vim
+ 	let g:termdebug_config['sign_decimal'] = 1
+ If the variable g:termdebug_config does not yet exist, you can use: >vim
+--- neovim-0.11.2.orig/runtime/pack/dist/opt/termdebug/plugin/termdebug.vim
++++ neovim-0.11.2/runtime/pack/dist/opt/termdebug/plugin/termdebug.vim
+@@ -1688,14 +1688,21 @@ func s:CreateBreakpoint(id, subid, enabl
+       let hiName = "debugBreakpoint"
+     endif
+     let label = ''
+-    if exists('g:termdebug_config') && has_key(g:termdebug_config, 'sign')
+-      let label = g:termdebug_config['sign']
+-    elseif exists('g:termdebug_config') && has_key(g:termdebug_config, 'sign_decimal')
+-      let label = printf('%02d', a:id)
+-      if a:id > 99
+-        let label = '9+'
++    if exists('g:termdebug_config')
++      if has_key(g:termdebug_config, 'signs')
++        let label = get(g:termdebug_config.signs, a:id - 1, '')
+       endif
+-    else
++      if label == '' && has_key(g:termdebug_config, 'sign')
++        let label = g:termdebug_config['sign']
++      endif
++      if label == '' && has_key(g:termdebug_config, 'sign_decimal')
++        let label = printf('%02d', a:id)
++        if a:id > 99
++          let label = '9+'
++        endif
++      endif
++    endif
++    if label == ''
+       let label = printf('%02X', a:id)
+       if a:id > 255
+         let label = 'F+'
