@@ -1,4 +1,4 @@
-From c9ac539749b6e0b85256c0a645abc660127c9bdf Mon Sep 17 00:00:00 2001
+From 96536d645c20beb058dee7e04cb6a434d4d62975 Mon Sep 17 00:00:00 2001
 From: Dimitry Ishenko <dimitry.ishenko@gmail.com>
 Date: Sun, 6 Jul 2025 18:02:14 -0400
 Subject: [PATCH] feat(termdebug): allow custom signs
@@ -14,12 +14,25 @@ let g:termdebug_config.sign = "⚫"
 ```
 
 where the first 9 breakpoint signs will have numbers, and the rest will
-be just black circles. Or, one can define as many as 20 circled numbers
-provided by the Unicode.
+be just black circles.
 ---
+ runtime/doc/terminal.txt                             | 2 ++
  runtime/pack/dist/opt/termdebug/plugin/termdebug.vim | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
+diff --git a/runtime/doc/terminal.txt b/runtime/doc/terminal.txt
+index 36ae8fa735..7fcb89fd92 100644
+--- a/runtime/doc/terminal.txt
++++ b/runtime/doc/terminal.txt
+@@ -657,6 +657,8 @@ than 99 will be displayed as "9+".
+ 
+ If you want to customize the breakpoint signs to show `>>` in the signcolumn: >vim
+ 	let g:termdebug_config['sign'] = '>>'
++You can also specify individual signs for the first N breakpoints: >vim
++	let g:termdebug_config['signs'] = ['a', 'b', 'c', 'x', 'y', 'z']
+ If you would like to use decimal (base 10) breakpoint signs: >vim
+ 	let g:termdebug_config['sign_decimal'] = 1
+ If the variable g:termdebug_config does not yet exist, you can use: >vim
 diff --git a/runtime/pack/dist/opt/termdebug/plugin/termdebug.vim b/runtime/pack/dist/opt/termdebug/plugin/termdebug.vim
 index b6da91a833..9e65daddd4 100644
 --- a/runtime/pack/dist/opt/termdebug/plugin/termdebug.vim
