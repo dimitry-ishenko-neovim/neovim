@@ -34,7 +34,7 @@ Depends:
  neovim-runtime (= ${source:Version}),
  ${shlibs:Depends},
  ${misc:Depends},
-Recommends: python3-pynvim (>= 0.5.2~), xclip | xsel | wl-clipboard, xxd
+Recommends: python3-pynvim (>= 0.5.2~), xsel | xclip | wl-clipboard, xxd
 Suggests: ctags
 Provides: editor
 Description: Vim-based text editor engineered for extensibility and usability
