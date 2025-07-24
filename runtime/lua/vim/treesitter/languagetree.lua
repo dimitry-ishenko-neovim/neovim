@@ -956,7 +956,9 @@ function LanguageTree:_get_injection(match, metadata)
         local ft = vim.filetype.match({ filename = text })
         lang = ft and resolve_lang(ft)
       elseif name == 'injection.content' then
-        ranges = get_node_ranges(node, self._source, metadata[id], include_children)
+        for _, range in ipairs(get_node_ranges(node, self._source, metadata[id], include_children)) do
+          ranges[#ranges + 1] = range
+        end
       end
     end
   end
@@ -1080,8 +1082,8 @@ function LanguageTree:_edit(
   end_row_new,
   end_col_new
 )
-  for _, tree in pairs(self._trees) do
-    tree:edit(
+  for i, tree in pairs(self._trees) do
+    self._trees[i] = tree:edit(
       start_byte,
       end_byte_old,
       end_byte_new,

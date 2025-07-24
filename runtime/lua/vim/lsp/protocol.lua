@@ -162,14 +162,13 @@ local constants = {
     MethodNotFound = -32601,
     InvalidParams = -32602,
     InternalError = -32603,
-    serverErrorStart = -32099,
-    serverErrorEnd = -32000,
     ServerNotInitialized = -32002,
     UnknownErrorCode = -32001,
     -- Defined by the protocol.
     RequestCancelled = -32800,
     ContentModified = -32801,
     ServerCancelled = -32802,
+    RequestFailed = -32803,
   },
 
   -- Describes the content type that a client supports in various
@@ -329,6 +328,7 @@ end
 --- capabilities.
 --- @return lsp.ClientCapabilities
 function protocol.make_client_capabilities()
+  ---@type lsp.ClientCapabilities
   return {
     general = {
       positionEncodings = {
@@ -340,6 +340,9 @@ function protocol.make_client_capabilities()
     textDocument = {
       diagnostic = {
         dynamicRegistration = false,
+        tagSupport = {
+          valueSet = get_value_set(constants.DiagnosticTag),
+        },
       },
       inlayHint = {
         dynamicRegistration = true,
@@ -436,6 +439,9 @@ function protocol.make_client_capabilities()
       foldingRange = {
         dynamicRegistration = false,
         lineFoldingOnly = true,
+        foldingRangeKind = {
+          valueSet = { 'comment', 'imports', 'region' },
+        },
         foldingRange = {
           collapsedText = true,
         },

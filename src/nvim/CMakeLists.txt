@@ -742,7 +742,11 @@ endif()
 
 target_sources(nlua0 PUBLIC ${NLUA0_SOURCES})
 
+if(STATIC_BUILD)
+  target_link_options(nvim_bin PRIVATE -static-libgcc -static-libstdc++ -static)
+endif()
 target_link_libraries(nvim_bin PRIVATE main_lib PUBLIC libuv)
+
 install_helper(TARGETS nvim_bin)
 if(MSVC)
   install(FILES $<TARGET_PDB_FILE:nvim_bin> DESTINATION ${CMAKE_INSTALL_BINDIR} OPTIONAL)
@@ -975,7 +979,7 @@ add_target(doc-eval
     ${PROJECT_SOURCE_DIR}/src/nvim/eval.lua
     ${PROJECT_SOURCE_DIR}/src/nvim/options.lua
     ${PROJECT_SOURCE_DIR}/src/nvim/vvars.lua
-    ${NVIM_RUNTIME_DIR}/doc/builtin.txt
+    ${NVIM_RUNTIME_DIR}/doc/vimfn.txt
   )
 
 add_custom_target(doc)

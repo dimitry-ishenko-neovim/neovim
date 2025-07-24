@@ -33,6 +33,28 @@ local assert_log = t.assert_log
 
 local testlog = 'Xtest-tui-log'
 
+describe('TUI', function()
+  it('exit status 1 and error message with server --listen error #34365', function()
+    clear()
+    local addr_in_use = api.nvim_get_vvar('servername')
+    local screen = tt.setup_child_nvim(
+      { '--listen', addr_in_use, '-u', 'NONE', '-i', 'NONE' },
+      { extra_rows = 10, cols = 60 }
+    )
+    -- When the address is very long, the error message may be only partly visible.
+    if #addr_in_use <= 600 then
+      screen:expect({
+        any = vim.pesc(
+          ('%s: Failed to --listen: address already in use:'):format(
+            is_os('win') and 'nvim.exe' or 'nvim'
+          )
+        ),
+      })
+    end
+    screen:expect({ any = vim.pesc('[Process exited 1]') })
+  end)
+end)
+
 describe('TUI :detach', function()
   before_each(function()
     os.remove(testlog)
@@ -104,12 +126,14 @@ describe('TUI :detach', function()
       nvim_set .. ' notermguicolors laststatus=2 background=dark',
     }, job_opts)
 
+    --- FIXME: On Windows spaces at the end of a screen line may have wrong attrs.
+    --- Remove the {MATCH:} when that's fixed.
     tt.feed_data('iHello, World')
     screen:expect {
       grid = [[
       Hello, World^                                      |
       {4:~                                                 }|*3
-      {MATCH:No Name}
+      {5:[No Name] [+]{MATCH: *}}{MATCH: *}|
       {3:-- INSERT --}                                      |
       {3:-- TERMINAL --}                                    |
     ]],
@@ -117,6 +141,7 @@ describe('TUI :detach', function()
 
     local child_session = n.connect(child_server)
     finally(function()
+      -- Avoid a dangling process after :detach.
       child_session:request('nvim_command', 'qall!')
     end)
     local status, child_uis = child_session:request('nvim_list_uis')
@@ -2118,15 +2143,20 @@ describe('TUI', function()
 
   it('no assert failure on deadly signal #21896', function()
     exec_lua([[vim.uv.kill(vim.fn.jobpid(vim.bo.channel), 'sigterm')]])
-    screen:expect {
-      grid = [[
+    screen:expect([[
       Nvim: Caught deadly signal 'SIGTERM'              |
                                                         |
       [Process exited 1]^                                |
                                                         |*3
       {3:-- TERMINAL --}                                    |
-    ]],
-    }
+    ]])
+  end)
+
+  it('exit status 1 and error message with deadly signal sent to server', function()
+    local _, server_pid = child_session:request('nvim_call_function', 'getpid', {})
+    exec_lua([[vim.uv.kill(..., 'sigterm')]], server_pid)
+    screen:expect({ any = vim.pesc([[Nvim: Caught deadly signal 'SIGTERM']]) })
+    screen:expect({ any = vim.pesc('[Process exited 1]') })
   end)
 
   it('no stack-use-after-scope with cursor color #22432', function()
@@ -3377,6 +3407,11 @@ describe('TUI', function()
 
     -- Attach another (non-TUI) UI to the child instance
     local alt = Screen.new(nil, nil, nil, child_session)
+    finally(function()
+      alt:detach()
+      -- Avoid a dangling process after :detach.
+      child_session:request('nvim_command', 'qall!')
+    end)
 
     -- Detach the first (primary) client so only the second UI is attached
     feed_data(':detach\n')
@@ -3385,8 +3420,6 @@ describe('TUI', function()
 
     -- osc52 should be cleared from termfeatures
     eq({ true, {} }, { child_session:request('nvim_eval', 'g:termfeatures') })
-
-    alt:detach()
   end)
 
   it('does not query the terminal for OSC 52 support when disabled', function()

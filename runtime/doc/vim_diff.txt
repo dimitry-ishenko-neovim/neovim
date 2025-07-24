@@ -134,7 +134,8 @@ To remove only the "How-to disable mouse" menu item (and its separator): >vim
 DEFAULT MAPPINGS
                                                         *default-mappings*
 Nvim creates the following default mappings at |startup|. You can disable any
-of these in your config by simply removing the mapping, e.g. ":unmap Y".
+of these in your config by simply removing the mapping, e.g. ":unmap Y". If
+you never want any default mappings, call |:mapclear| early in your config.
 
 - Y |Y-default|
 - <C-U> |i_CTRL-U-default|
@@ -152,6 +153,7 @@ of these in your config by simply removing the mapping, e.g. ":unmap Y".
   - |grr|
   - |gra|
   - |gri|
+  - |grt|
   - |gO|
 - <C-S> |i_CTRL-S|
 - ]d |]d-default|
@@ -855,9 +857,8 @@ Startup:
 Test functions:
 - test_alloc_fail()
 - test_autochdir()
-- test_disable_char_avail()
 - test_feedinput()
-- test_garbagecollect_soon
+- test_garbagecollect_soon()
 - test_getvalue()
 - test_ignore_error()
 - test_null_blob()
@@ -875,6 +876,8 @@ Test functions:
 - test_setmouse()
 - test_settime()
 - test_srand_seed()
+- test_unknown()
+- test_void()
 
 TUI:
                           *t_xx* *termcap-options* *t_AB* *t_Sb* *t_vb* *t_SI*

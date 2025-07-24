@@ -1507,17 +1507,20 @@ int typval_exec_lua_callable(LuaRef lua_cb, int argcount, typval_T *argvars, typ
 /// Used for nvim_exec_lua() and internally to execute a lua string.
 ///
 /// @param[in]  str  String to execute.
+/// @param[in]  chunkname Chunkname, defaults to "<nvim>".
 /// @param[in]  args array of ... args
 /// @param[in]  mode Whether and how the the return value should be converted to Object
 /// @param[in] arena  can be NULL, then nested allocations are used
 /// @param[out]  err  Location where error will be saved.
 ///
 /// @return Return value of the execution.
-Object nlua_exec(const String str, const Array args, LuaRetMode mode, Arena *arena, Error *err)
+Object nlua_exec(const String str, const char *chunkname, const Array args, LuaRetMode mode,
+                 Arena *arena, Error *err)
 {
   lua_State *const lstate = global_lstate;
 
-  if (luaL_loadbuffer(lstate, str.data, str.size, "<nvim>")) {
+  const char *name = (chunkname && chunkname[0]) ? chunkname : "<nvim>";
+  if (luaL_loadbuffer(lstate, str.data, str.size, name)) {
     size_t len;
     const char *errstr = lua_tolstring(lstate, -1, &len);
     api_set_error(err, kErrorTypeValidation,
@@ -2248,6 +2251,26 @@ int nlua_do_ucmd(ucmd_T *cmd, exarg_T *eap, bool preview)
     lua_pushinteger(lstate, cmd->uc_def);
   }
   lua_setfield(lstate, -2, "count");
+
+  char nargs[2];
+  if (cmd->uc_argt & EX_EXTRA) {
+    if (cmd->uc_argt & EX_NOSPC) {
+      if (cmd->uc_argt & EX_NEEDARG) {
+        nargs[0] = '1';
+      } else {
+        nargs[0] = '?';
+      }
+    } else if (cmd->uc_argt & EX_NEEDARG) {
+      nargs[0] = '+';
+    } else {
+      nargs[0] = '*';
+    }
+  } else {
+    nargs[0] = '0';
+  }
+  nargs[1] = NUL;
+  lua_pushstring(lstate, nargs);
+  lua_setfield(lstate, -2, "nargs");
 
   // The size of this buffer is chosen empirically to be large enough to hold
   // every possible modifier (with room to spare). If the list of possible

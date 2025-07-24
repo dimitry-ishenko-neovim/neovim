@@ -2170,6 +2170,11 @@ describe('API', function()
       feed('<F2>')
       eq({ mode = 'n', blocking = false }, api.nvim_get_mode())
     end)
+
+    it('returns "c" during number prompt', function()
+      feed('ifoo<Esc>z=')
+      eq({ mode = 'c', blocking = false }, api.nvim_get_mode())
+    end)
   end)
 
   describe('RPC (K_EVENT)', function()
@@ -5510,5 +5515,33 @@ describe('API', function()
     eq(expected_lines, actual_lines)
 
     n.assert_alive()
+  end)
+
+  it('nvim__redraw updates topline', function()
+    local screen = Screen.new(40, 8)
+    fn.setline(1, fn.range(100))
+    feed(':call getchar()<CR>')
+    fn.cursor(50, 1)
+    screen:expect([[
+      0                                       |
+      1                                       |
+      2                                       |
+      3                                       |
+      4                                       |
+      5                                       |
+      6                                       |
+      ^:call getchar()                         |
+    ]])
+    api.nvim__redraw({ flush = true })
+    screen:expect([[
+      46                                      |
+      47                                      |
+      48                                      |
+      49                                      |
+      50                                      |
+      51                                      |
+      52                                      |
+      ^:call getchar()                         |
+    ]])
   end)
 end)

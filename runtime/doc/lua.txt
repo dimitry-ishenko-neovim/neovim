@@ -1466,20 +1466,21 @@ Lua module: vim                                                      *lua-vim*
 vim.cmd({command})                                                 *vim.cmd()*
     Executes Vimscript (|Ex-commands|).
 
-    Note that `vim.cmd` can be indexed with a command name to return a
-    callable function to the command.
+    Can be indexed with a command name to get a function, thus you can write
+    `vim.cmd.echo(…)` instead of `vim.cmd{cmd='echo',…}`.
 
-    Example: >lua
+    Examples: >lua
+        -- Single command:
         vim.cmd('echo 42')
+        -- Multiline script:
         vim.cmd([[
-          augroup My_group
+          augroup my.group
             autocmd!
             autocmd FileType c setlocal cindent
           augroup END
         ]])
 
-        -- Ex command :echo "foo"
-        -- Note string literals need to be double quoted.
+        -- Ex command :echo "foo". Note: string literals must be double-quoted.
         vim.cmd('echo "foo"')
         vim.cmd { cmd = 'echo', args = { '"foo"' } }
         vim.cmd.echo({ args = { '"foo"' } })
@@ -1487,22 +1488,20 @@ vim.cmd({command})                                                 *vim.cmd()*
 
         -- Ex command :write! myfile.txt
         vim.cmd('write! myfile.txt')
-        vim.cmd { cmd = 'write', args = { "myfile.txt" }, bang = true }
-        vim.cmd.write { args = { "myfile.txt" }, bang = true }
-        vim.cmd.write { "myfile.txt", bang = true }
+        vim.cmd { cmd = 'write', args = { 'myfile.txt' }, bang = true }
+        vim.cmd.write { args = { 'myfile.txt' }, bang = true }
+        vim.cmd.write { 'myfile.txt', bang = true }
 
-        -- Ex command :colorscheme blue
-        vim.cmd('colorscheme blue')
-        vim.cmd.colorscheme('blue')
+        -- Ex command :vertical resize +2
+        vim.cmd.resize({ '+2', mods = { vertical = true } })
 <
 
     Parameters: ~
-      • {command}  (`string|table`) Command(s) to execute. If a string,
-                   executes multiple lines of Vimscript at once. In this case,
-                   it is an alias to |nvim_exec2()|, where `opts.output` is
-                   set to false. Thus it works identical to |:source|. If a
-                   table, executes a single command. In this case, it is an
-                   alias to |nvim_cmd()| where `opts` is empty.
+      • {command}  (`string|table`) Command(s) to execute.
+                   • The string form supports multiline Vimscript (alias to
+                     |nvim_exec2()|, behaves like |:source|).
+                   • The table form executes a single command (alias to
+                     |nvim_cmd()|).
 
     See also: ~
       • |ex-cmd-index|
@@ -1779,7 +1778,9 @@ vim.system({cmd}, {opts}, {on_exit})                            *vim.system()*
                      the new process. Inherits the current environment with
                      `NVIM` set to |v:servername|.
                    • clear_env: (boolean) `env` defines the job environment
-                     exactly, instead of merging current environment.
+                     exactly, instead of merging current environment. Note: if
+                     `env` is `nil`, the current environment is used but
+                     without `NVIM` set.
                    • stdin: (string|string[]|boolean) If `true`, then a pipe
                      to stdin is opened and can be written to via the
                      `write()` method to SystemObj. If string or string[] then
@@ -2940,11 +2941,13 @@ vim.fs.dir({path}, {opts})                                      *vim.fs.dir()*
                 iterate over. The path is first normalized
                 |vim.fs.normalize()|.
       • {opts}  (`table?`) Optional keyword arguments:
-                • depth: integer|nil How deep the traverse (default 1)
-                • skip: (fun(dir_name: string): boolean)|nil Predicate to
+                • {depth}? (`integer`, default: `1`) How deep the traverse.
+                • {skip}? (`fun(dir_name: string): boolean`) Predicate to
                   control traversal. Return false to stop searching the
-                  current directory. Only useful when depth > 1
-                • follow: boolean|nil Follow symbolic links. (default: false)
+                  current directory. Only useful when depth > 1 Return an
+                  iterator over the items located in {path}
+                • {follow}? (`boolean`, default: `false`) Follow symbolic
+                  links.
 
     Return: ~
         (`Iterator`) over items in {path}. Each iteration yields two values:
@@ -3006,7 +3009,7 @@ vim.fs.find({names}, {opts})                                   *vim.fs.find()*
 
                  The function should return `true` if the given item is
                  considered a match.
-      • {opts}   (`table`) Optional keyword arguments:
+      • {opts}   (`table?`) Optional keyword arguments:
                  • {path}? (`string`) Path to begin searching from. If
                    omitted, the |current-directory| is used.
                  • {upward}? (`boolean`, default: `false`) Search upward
@@ -3154,7 +3157,7 @@ vim.fs.root({source}, {marker})                                *vim.fs.root()*
     If the buffer is unnamed (has no backing file) or has a non-empty
     'buftype' then the search begins from Nvim's |current-directory|.
 
-    Example: >lua
+    Examples: >lua
         -- Find the root of a Python project, starting from file 'main.py'
         vim.fs.root(vim.fs.joinpath(vim.env.PWD, 'main.py'), {'pyproject.toml', 'setup.py' })
 
@@ -3165,6 +3168,10 @@ vim.fs.root({source}, {marker})                                *vim.fs.root()*
         vim.fs.root(0, function(name, path)
           return name:match('%.csproj$') ~= nil
         end)
+
+        -- Find the first ancestor directory containing EITHER "stylua.toml" or ".luarc.json"; if
+        -- not found, find the first ancestor containing ".git":
+        vim.fs.root(0, { { 'stylua.toml', '.luarc.json' }, '.git' })
 <
 
     Attributes: ~
@@ -3174,10 +3181,13 @@ vim.fs.root({source}, {marker})                                *vim.fs.root()*
       • {source}  (`integer|string`) Buffer number (0 for current buffer) or
                   file path (absolute or relative to the |current-directory|)
                   to begin the search from.
-      • {marker}  (`string|string[]|fun(name: string, path: string): boolean`)
-                  A marker, or list of markers, to search for. If a function,
-                  the function is called for each evaluated item and should
-                  return true if {name} and {path} are a match.
+      • {marker}  (`(string|string[]|fun(name: string, path: string): boolean)[]|string|fun(name: string, path: string): boolean`)
+                  Filename, function, or list thereof, that decides how to
+                  find the root. To indicate "equal priority", specify items
+                  in a nested list `{ { 'a.txt', 'b.lua' }, … }`. A function
+                  item must return true if `name` and `path` are a match. Each
+                  item (which may itself be a nested list) is evaluated
+                  in-order against all ancestors, until a match is found.
 
     Return: ~
         (`string?`) Directory path containing one of the given markers, or nil

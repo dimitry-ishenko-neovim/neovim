@@ -1801,7 +1801,8 @@ function vim.fn.exp(expr) end
 ---   <SID>    "<SNR>123_"  where "123" is the
 ---       current script ID  |<SID>|
 ---   <script>  sourced script file, or script file
----       where the current function was defined
+---       where the current function was defined.
+---       Use |debug.getinfo()| in Lua scripts.
 ---   <stack>    call stack
 ---   <cword>    word under the cursor
 ---   <cWORD>    WORD under the cursor
@@ -3692,6 +3693,10 @@ function vim.fn.getreginfo(regname) end
 --- - It is evaluated in current window context, which makes a
 ---   difference if the buffer is displayed in a window with
 ---   different 'virtualedit' or 'list' values.
+--- - When specifying an exclusive selection and {pos1} and {pos2}
+---   are equal, the returned list contains a single character as
+---   if selection is inclusive, to match the behavior of an empty
+---   exclusive selection in Visual mode.
 ---
 --- Examples: >vim
 ---   xnoremap <CR>

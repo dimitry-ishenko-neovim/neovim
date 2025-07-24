@@ -210,12 +210,15 @@ end
 --- @param clear_env? boolean
 --- @return string[]?
 local function setup_env(env, clear_env)
-  if clear_env then
-    return env
+  if not env and clear_env then
+    return
   end
 
-  --- @type table<string,string|number>
-  env = vim.tbl_extend('force', base_env(), env or {})
+  env = env or {}
+  if not clear_env then
+    --- @type table<string,string|number>
+    env = vim.tbl_extend('force', base_env(), env)
+  end
 
   local renv = {} --- @type string[]
   for k, v in pairs(env) do

@@ -43,14 +43,13 @@ local validate = vim.validate
 ---   array.
 --- @field capabilities? lsp.ClientCapabilities
 ---
---- command string[] that launches the language
---- server (treated as in |jobstart()|, must be absolute or on `$PATH`, shell constructs like
---- "~" are not expanded), or function that creates an RPC client. Function receives
---- a `dispatchers` table and returns a table with member functions `request`, `notify`,
---- `is_closing` and `terminate`.
+--- Command `string[]` that launches the language server (treated as in |jobstart()|, must be
+--- absolute or on `$PATH`, shell constructs like "~" are not expanded), or function that creates an
+--- RPC client. Function receives a `dispatchers` table and the resolved `config`, and must return
+--- a table with member functions `request`, `notify`, `is_closing` and `terminate`.
 --- See |vim.lsp.rpc.request()|, |vim.lsp.rpc.notify()|.
----  For TCP there is a builtin RPC client factory: |vim.lsp.rpc.connect()|
---- @field cmd string[]|fun(dispatchers: vim.lsp.rpc.Dispatchers): vim.lsp.rpc.PublicClient
+--- For TCP there is a builtin RPC client factory: |vim.lsp.rpc.connect()|
+--- @field cmd string[]|fun(dispatchers: vim.lsp.rpc.Dispatchers, config: vim.lsp.ClientConfig): vim.lsp.rpc.PublicClient
 ---
 --- Directory to launch the `cmd` process. Not related to `root_dir`.
 --- (default: cwd)
@@ -73,7 +72,7 @@ local validate = vim.validate
 --- Daemonize the server process so that it runs in a separate process group from Nvim.
 --- Nvim will shutdown the process on exit, but if Nvim fails to exit cleanly this could leave
 --- behind orphaned server processes.
---- (default: true)
+--- (default: `true`)
 --- @field detached? boolean
 ---
 --- A table with flags for the client. The current (experimental) flags are:
@@ -89,7 +88,8 @@ local validate = vim.validate
 --- the LSP spec.
 --- @field init_options? lsp.LSPObject
 ---
---- (default: client-id) Name in logs and user messages.
+--- Name in logs and user messages.
+--- (default: client-id)
 --- @field name? string
 ---
 --- Called "position encoding" in LSP spec. The encoding that the LSP server expects, used for
@@ -132,9 +132,10 @@ local validate = vim.validate
 --- supports workspace folders but none are configured. See `workspaceFolders` in LSP spec.
 --- @field workspace_folders? lsp.WorkspaceFolder[]
 ---
---- (default false) Server requires a workspace (no "single file" support). Note: Without
+--- Server requires a workspace (no "single file" support). Note: Without
 --- a workspace, cross-file features (navigation, hover) may or may not work depending on the
 --- language server, even if the server doesn't require a workspace.
+--- (default: `false`)
 --- @field workspace_required? boolean
 
 --- @class vim.lsp.Client.Progress: vim.Ringbuf<{token: integer|string, value: any}>
@@ -454,7 +455,7 @@ function Client.create(config)
   -- Start the RPC client.
   local config_cmd = config.cmd
   if type(config_cmd) == 'function' then
-    self.rpc = config_cmd(dispatchers)
+    self.rpc = config_cmd(dispatchers, config)
   else
     self.rpc = lsp.rpc.start(config_cmd, dispatchers, {
       cwd = config.cmd_cwd,

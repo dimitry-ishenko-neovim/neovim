@@ -188,6 +188,7 @@ DEFAULTS
   • |gri| in Normal mode maps to |vim.lsp.buf.implementation()|
   • |gO| in Normal mode maps to |vim.lsp.buf.document_symbol()|
   • |gra| in Normal and Visual mode maps to |vim.lsp.buf.code_action()|
+  • |grt| in Normal mode maps to |vim.lsp.buf.type_definition()|
   • CTRL-S in Insert and Select mode maps to |vim.lsp.buf.signature_help()|
   • Mouse |popup-menu| includes an "Open in web browser" item when you right-click
     on a URL.
@@ -283,6 +284,8 @@ LSP
   its parameters.
 • |vim.lsp.Config| gained `workspace_required`.
 • `root_markers` in |vim.lsp.Config| can now be ordered by priority.
+• The function form of `cmd` in a vim.lsp.Config or vim.lsp.ClientConfig
+  receives the resolved config as the second arg: `cmd(dispatchers, config)`.
 
 LUA
 
@@ -305,6 +308,7 @@ LUA
 • |vim.hl.range()| now has a optional `timeout` field which allows for multiple
   timed highlights.
 • |vim.text.indent()| indents/dedents text.
+• |vim.fs.root()| can define "equal priority" via nested lists.
 
 OPTIONS
 

@@ -514,7 +514,7 @@ Object nvim_exec_lua(String code, Array args, Arena *arena, Error *err)
   FUNC_API_REMOTE_ONLY
 {
   // TODO(bfredl): convert directly from msgpack to lua and then back again
-  return nlua_exec(code, args, kRetObject, arena, err);
+  return nlua_exec(code, NULL, args, kRetObject, arena, err);
 }
 
 /// Calculates the number of display cells occupied by `text`.
@@ -989,10 +989,7 @@ Buffer nvim_create_buf(Boolean listed, Boolean scratch, Error *err)
 ///
 /// ```lua
 /// vim.api.nvim_create_user_command('TermHl', function()
-///   local b = vim.api.nvim_create_buf(false, true)
-///   local chan = vim.api.nvim_open_term(b, {})
-///   vim.api.nvim_chan_send(chan, table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), '\n'))
-///   vim.api.nvim_win_set_buf(0, b)
+///   vim.api.nvim_open_term(0, {})
 /// end, { desc = 'Highlights ANSI termcodes in curbuf' })
 /// ```
 ///
@@ -2360,6 +2357,8 @@ void nvim__redraw(Dict(redraw) *opts, Error *err)
   // Redraw pending screen updates when explicitly requested or when determined
   // that it is necessary to properly draw other requested components.
   if (opts->flush && !cmdpreview) {
+    validate_cursor(curwin);
+    update_topline(curwin);
     update_screen();
   }
 

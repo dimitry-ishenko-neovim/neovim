@@ -811,7 +811,7 @@ void getout(int exitval)
 
 #ifdef MSWIN
   // Restore Windows console icon before exiting.
-  os_icon_set(NULL, NULL);
+  os_icon_reset();
   os_title_reset();
 #endif
 
@@ -958,7 +958,7 @@ static void remote_request(mparm_T *params, int remote_args, char *server_addr, 
   ADD_C(a, CSTR_AS_OBJ(connect_error));
   ADD_C(a, ARRAY_OBJ(args));
   String s = STATIC_CSTR_AS_STRING("return vim._cs_remote(...)");
-  Object o = nlua_exec(s, a, kRetObject, NULL, &err);
+  Object o = nlua_exec(s, NULL, a, kRetObject, NULL, &err);
   kv_destroy(args);
   if (ERROR_SET(&err)) {
     fprintf(stderr, "%s\n", err.msg);
@@ -1646,9 +1646,8 @@ static void create_windows(mparm_T *parmp)
     if (parmp->window_layout == WIN_TABS) {
       parmp->window_count = make_tabpages(parmp->window_count);
       TIME_MSG("making tab pages");
-    } else if (firstwin->w_next == NULL) {
-      parmp->window_count = make_windows(parmp->window_count,
-                                         parmp->window_layout == WIN_VER);
+    } else if (firstwin->w_next == NULL || firstwin->w_next->w_floating) {
+      parmp->window_count = make_windows(parmp->window_count, parmp->window_layout == WIN_VER);
       TIME_MSG("making windows");
     } else {
       parmp->window_count = win_count();
@@ -2060,7 +2059,8 @@ static void do_exrc_initialization(void)
     str = nlua_read_secure(VIMRC_LUA_FILE);
     if (str != NULL) {
       Error err = ERROR_INIT;
-      nlua_exec(cstr_as_string(str), (Array)ARRAY_DICT_INIT, kRetNilBool, NULL, &err);
+      nlua_exec(cstr_as_string(str), "@"VIMRC_LUA_FILE, (Array)ARRAY_DICT_INIT, kRetNilBool, NULL,
+                &err);
       xfree(str);
       if (ERROR_SET(&err)) {
         semsg("Error detected while processing %s:", VIMRC_LUA_FILE);
