@@ -1,3 +1,279 @@
+neovim (0.11.3-1) unstable; urgency=medium
+
+  [ Dimitry Ishenko ]
+  * d/control: update treesitter deps
+  * d/control: prefer xsel over xclip
+  * Merge tag 'v0.11.3'
+
+  [ Justin M. Keyes ]
+  * NVIM v0.11.3
+
+  [ neovim-backports[bot] ]
+  * fix(health): bad format() call #34906
+
+  [ Christian Clason ]
+  * build(deps): update tree-sitter parsers and queries #34905
+
+  [ luukvbaal ]
+  * fix(messages): recognize cmdline one_key/number prompt State
+    (#34206)
+  * fix(messages): make swapfile attention message part of prompt
+    (#34414)
+
+  [ jade ]
+  * fix(vim.json): loss of precision on integers >14 digits #34876
+
+  [ zeertzjq ]
+  * fix(tui): check for title support correctly (#34866)
+
+  [ phanium ]
+  * fix(runtime): no conceal in qf on :lopen #34854
+
+  [ neovim-backports[bot] ]
+  * fix(health): floating window closes when opening TOC (gO)
+
+  [ zeertzjq ]
+  * test(api): nvim_get_keymap returns correct lhsraw and lhsrawalt
+
+  [ ncrpy ]
+  * fix(api): populate lhsrawalt in nvim_get_keymap response
+
+  [ zeertzjq ]
+  * Merge pull request #34839 from zeertzjq/backport
+  * vim-patch:9.1.1521: completion: pum does not reset scroll pos on
+    reopen with 'noselect' (#34836)
+
+  [ Maria José Solano ]
+  * refactor(lsp): consistent usage of vim.notify #34802
+
+  [ zeertzjq ]
+  * vim-patch:7a734b7: tests: fix typo in comment (after v9.1.1511)
+  * vim-patch:9.1.1511: tests: two edit tests change v:testing from 1 to
+    0
+  * refactor(getchar): rename test variable (#34769)
+  * fix(incsearch): include compsing characters with Ctrl-L
+  * test(old): emulate test_override('char_avail') using FFI
+  * test(editor/defaults_spec): fix flakiness (#34752)
+  * vim-patch:9.1.1506: tests: missing cleanup in
+    Test_search_cmdline_incsearch_highlight() (#34748)
+  * test(old): emulate test_override('starting') with FFI (#34742)
+
+  [ Alex Díaz ]
+  * build: support static build #34728
+
+  [ Rodrigodd ]
+  * fix(treesitter): ensure TSLuaTree is always immutable
+  * test(treesitter): test tree:root() is idempotent
+
+  [ Lewis Russell ]
+  * fix(vim.system): env=nil passes env=nil to uv.spawn
+
+  [ Justin M. Keyes ]
+  * Merge #34722 from justinmk/release
+
+  [ Yochem van Rosmalen ]
+  * test(exrc): lua exrc knows its location #34713
+  * fix(exrc): exrc knows its own location #34638
+
+  [ Gabriel Ford ]
+  * fix(term): terminal attr index may exceed TERM_ATTRS_MAX #34318
+  * fix(tui): don't crash when nvim__screenshot() is called with bad
+    path (#34594)
+
+  [ Phạm Bình An ]
+  * fix(tutor): cannot find tutors in pack/*/start/* #34689
+  * vim-patch:9.1.1421: tests: need a test for the new-style tutor.tutor
+    (#34267)
+
+  [ luukvbaal ]
+  * vim-patch:9.1.1482: scrolling with 'splitkeep' and line() (#34670)
+
+  [ Justin M. Keyes ]
+  * feat(defaults): map "grt" to LSP type_definition #34663
+  * Merge pull request #34668 from brianhuster/release-0.11
+
+  [ Phạm Bình An ]
+  * fix(vim.version): vim.VersionRange:has(<prerelease>) (#33324)
+  * vim-patch:0fb6cea: runtime(lua): update 'path' option in filetype
+    plugin #33876
+
+  [ Maria José Solano ]
+  * fix(lsp): add `RequestFailed` error code constant #34645
+
+  [ zeertzjq ]
+  * Merge pull request #34651 from zeertzjq/backport
+  * fix(column): missing redraw with virt_lines_leftcol (#34650)
+
+  [ Birdee ]
+  * fix(vim.system): clear_env=true gives an invalid env to uv.spawn
+    #33955
+
+  [ Dmytro Meleshko ]
+  * fix(health): highlight group conflicts with help #34616
+
+  [ Axel ]
+  * fix(tui): avoid memory leak and compiler warning on Windows (#34225)
+
+  [ Gabriel Ford ]
+  * build(msvc): suppress msvc build warning for different enum types
+    (#34591)
+
+  [ Oskar Haarklou Veileborg ]
+  * fix(lsp) type annotation for `vim.lsp.Config.cmd` #34574
+
+  [ Bruce Wen ]
+  * fix(diagnostics): validate opts.signs #34565
+
+  [ Justin M. Keyes ]
+  * backport: feat(lsp): pass resolved config to cmd() #34560
+
+  [ phanium ]
+  * docs: vim.fs.dir.Opts type #34546
+
+  [ Maria José Solano ]
+  * fix(lsp): use correct deprecation function (#34518)
+  * fix(lsp): include client ID when receiving unknown fold kind
+    (#34535)
+
+  [ zeertzjq ]
+  * vim-patch:9.1.1463: Integer overflow in getmarklist() after linewise
+    operation (#34532)
+
+  [ Riley Bruins ]
+  * fix(lsp): advertise supported fold kinds (#34461)
+
+  [ Lewis Russell ]
+  * fix(treesitter): enable a gc for wasmtime
+
+  [ zeertzjq ]
+  * docs(meta): fix incorrect bar -> backtick replacement (#34520)
+
+  [ luukvbaal ]
+  * fix(window): don't enter unfocusable or hidden prevwin (#34486)
+
+  [ Justin M. Keyes ]
+  * docs: vim.fs., diagnostics, lsp #34488
+
+  [ Antoine ]
+  * fix(clipboard): enable cache for function providers #34470
+
+  [ Andre Toerien ]
+  * fix(lsp): _cancel_all_requests() tries to cancel completed requests
+    #34105
+
+  [ bfredl ]
+  * fix(msgpack): flush incomplete big UI event before packing RPC event
+
+  [ zeertzjq ]
+  * fix(terminal): don't disable scrolloff for non-terminal buffers
+    (#34451)
+
+  [ fortime ]
+  * fix(editorconfig): a custom property is treated as a section
+    (#34445)
+
+  [ Riley Bruins ]
+  * fix(lsp): announce diagnostic tag support (#34436)
+
+  [ zeertzjq ]
+  * test(screen): still match by full row when {MATCH:} is present
+    (#34437)
+  * vim-patch:9.1.1450: Session has wrong arglist with :tcd and
+    :arglocal (#34430)
+  * Merge pull request #34428 from zeertzjq/backport
+  * fix(tui): wait for embedded server's exit code
+
+  [ Gregory Anders ]
+  * fix(terminal): fix OSC 8 parsing (#34424)
+
+  [ Siddhant Agarwal ]
+  * backport: feat(vim.fs): vim.fs.root() can control priority #34413
+
+  [ Mtende ]
+  * docs(diagnostics): default keymaps #34400
+
+  [ notomo ]
+  * fix(treesitter): ensure window is valid in async parsing #34385
+
+  [ luukvbaal ]
+  * fix(startup): make startup windows if there are only floating
+    windows (#34349)
+
+  [ Riley Bruins ]
+  * fix(treesitter): support multiple `@injection.content` captures
+  * fix(treesitter): scope highlight state per window
+
+  [ luukvbaal ]
+  * fix(api): update topline when flushing with nvim__redraw() (#34346)
+
+  [ zeertzjq ]
+  * test(tui_spec): avoid dangling process in OSC 52 test (#34356)
+
+  [ Rodrigodd ]
+  * test(treesitter): test node access after tree edit
+  * refactor(treesitter): avoid unnecessarily copying tree
+  * fix(treesitter): ensure TSNode's tree is immutable
+
+  [ Kai-Hsiang Hsu ]
+  * fix(lsp): only auto-detach lsp.config enabled clients #34325
+
+  [ brianhuster ]
+  * vim-patch:9.1.1404: wrong link to Chapter 2 in new-tutor
+  * vim-patch:2323f22: runtime(new-tutor): add chapter two to the
+    interactive tutorial
+
+  [ Phạm Bình An ]
+  * vim-patch:eb59129: runtime(typescript): remove Fixedgq() function
+    from indent script (#34334)
+
+  [ zeertzjq ]
+  * fix(menu): fix listing of submenus (#34315)
+
+  [ Justin M. Keyes ]
+  * Merge pull request #34305
+
+  [ Christian Clason ]
+  * ci(release): drop manual shasum collection
+
+  [ Emanuel Krollmann ]
+  * refactor(windows): redundant icon messages #34274
+  * fix(windows): don't set window icon on SIGHUP #34260
+
+  [ luukvbaal ]
+  * fix(api): adjust fix for reconfiguring float "relative" (#34287)
+
+  [ zeertzjq ]
+  * vim-patch:bfeefc4: runtime(doc): clarify the effect of exclusive
+    single char selections (#34289)
+
+  [ luukvbaal ]
+  * fix(api): reconfiguring float "relative" does not clear "win"
+    (#34271)
+
+  [ glepnir ]
+  * fix(api): add missing nargs field to user command Lua callbacks
+    #34210
+
+  [ Justin M. Keyes ]
+  * docs: news, intro, lsp, api #34264
+
+  [ zeertzjq ]
+  * fix(redraw): update curswant for Visual selection (#34241)
+
+  [ Christian Clason ]
+  * ci(release): bump windows runner to windows-2022
+
+  [ Phạm Bình An ]
+  * docs: rename builtin.txt, eval.txt #34212
+
+  [ phanium ]
+  * fix(terminal): stack overflow when too many csi args (#34012)
+
+  [ bfredl ]
+  * version bump
+
+ -- Dimitry Ishenko <dimitry.ishenko@gmail.com>  Thu, 24 Jul 2025 20:44:26 -0400
+
 neovim (0.11.2-6) unstable; urgency=medium
 
   * Update termdebug patch (again)
