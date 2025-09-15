@@ -52,11 +52,14 @@ function TSHighlighterQuery:query()
   return self._query
 end
 
+---@alias MarkInfo { start_line: integer, start_col: integer, opts: vim.api.keyset.set_extmark }
+
 ---@class (private) vim.treesitter.highlighter.State
 ---@field tstree TSTree
 ---@field next_row integer
 ---@field iter vim.treesitter.highlighter.Iter?
 ---@field highlighter_query vim.treesitter.highlighter.Query
+---@field prev_marks MarkInfo[]
 
 ---@nodoc
 ---@class vim.treesitter.highlighter
@@ -179,10 +182,13 @@ function TSHighlighter:destroy()
     vim.b[self.bufnr].ts_highlight = nil
     api.nvim_buf_clear_namespace(self.bufnr, ns, 0, -1)
     if vim.g.syntax_on == 1 then
-      api.nvim_exec_autocmds(
-        'FileType',
-        { group = 'syntaxset', buffer = self.bufnr, modeline = false }
-      )
+      -- FileType autocmds commonly assume curbuf is the target buffer, so nvim_buf_call.
+      api.nvim_buf_call(self.bufnr, function()
+        api.nvim_exec_autocmds(
+          'FileType',
+          { group = 'syntaxset', buffer = self.bufnr, modeline = false }
+        )
+      end)
     end
   end
 end
@@ -220,6 +226,7 @@ function TSHighlighter:prepare_highlight_states(win, srow, erow)
       next_row = 0,
       iter = nil,
       highlighter_query = hl_query,
+      prev_marks = {},
     })
   end)
 end
@@ -311,6 +318,35 @@ local function get_spell(capture_name)
   return nil, 0
 end
 
+---Adds the mark to the buffer, clipped by the line.
+---Queues the remainder if the mark continues after the line.
+---@param m MarkInfo
+---@param buf integer
+---@param line integer
+---@param next_marks MarkInfo[]
+local function add_mark(m, buf, line, next_marks)
+  local cur_start_l = m.start_line
+  local cur_start_c = m.start_col
+  if cur_start_l < line then
+    cur_start_l = line
+    cur_start_c = 0
+  end
+
+  local cur_opts = m.opts
+  if cur_opts.end_line >= line + 1 then
+    cur_opts = vim.deepcopy(cur_opts, true)
+    cur_opts.end_line = line + 1
+    cur_opts.end_col = 0
+    table.insert(next_marks, m)
+  end
+
+  local empty = cur_opts.end_line < cur_start_l
+    or (cur_opts.end_line == cur_start_l and cur_opts.end_col <= cur_start_c)
+  if cur_start_l <= line and not empty then
+    api.nvim_buf_set_extmark(buf, ns, cur_start_l, cur_start_c, cur_opts)
+  end
+end
+
 ---@param self vim.treesitter.highlighter
 ---@param win integer
 ---@param buf integer
@@ -326,6 +362,12 @@ local function on_line_impl(self, win, buf, line, on_spell, on_conceal)
     -- Only consider trees that contain this line
     if root_start_row > line or root_end_row < line then
       return
+    end
+
+    local next_marks = {}
+
+    for _, mark in ipairs(state.prev_marks) do
+      add_mark(mark, buf, line, next_marks)
     end
 
     if state.iter == nil or state.next_row < line then
@@ -367,7 +409,7 @@ local function on_line_impl(self, win, buf, line, on_spell, on_conceal)
         local url = get_url(match, buf, capture, metadata)
 
         if hl and end_row >= line and not on_conceal and (not on_spell or spell ~= nil) then
-          api.nvim_buf_set_extmark(buf, ns, start_row, start_col, {
+          local opts = {
             end_line = end_row,
             end_col = end_col,
             hl_group = hl,
@@ -376,7 +418,9 @@ local function on_line_impl(self, win, buf, line, on_spell, on_conceal)
             conceal = conceal,
             spell = spell,
             url = url,
-          })
+          }
+          local mark = { start_line = start_row, start_col = start_col, opts = opts }
+          add_mark(mark, buf, line, next_marks)
         end
 
         if
@@ -395,6 +439,8 @@ local function on_line_impl(self, win, buf, line, on_spell, on_conceal)
         state.next_row = start_row
       end
     end
+
+    state.prev_marks = next_marks
   end)
 end
 

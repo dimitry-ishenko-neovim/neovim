@@ -679,10 +679,6 @@ bool close_buffer(win_T *win, buf_T *buf, int action, bool abort_if_last, bool i
     return false;
   }
 
-  // Disable buffer-updates for the current buffer.
-  // No need to check `unload_buf`: in that case the function returned above.
-  buf_updates_unload(buf, false);
-
   if (win != NULL  // Avoid bogus clang warning.
       && win_valid_any_tab(win)
       && win->w_buffer == buf) {
@@ -789,6 +785,11 @@ void buf_freeall(buf_T *buf, int flags)
   bufref_T bufref;
   set_bufref(&bufref, buf);
 
+  buf_updates_unload(buf, false);
+  if (!bufref_valid(&bufref)) {
+    // on_detach callback deleted the buffer.
+    return;
+  }
   if ((buf->b_ml.ml_mfp != NULL)
       && apply_autocmds(EVENT_BUFUNLOAD, buf->b_fname, buf->b_fname, false, buf)
       && !bufref_valid(&bufref)) {
@@ -935,7 +936,7 @@ static void free_buffer_stuff(buf_T *buf, int free_flags)
   map_clear_mode(buf, MAP_ALL_MODES, true, true);   // clear local abbrevs
   XFREE_CLEAR(buf->b_start_fenc);
 
-  buf_updates_unload(buf, false);
+  buf_free_callbacks(buf);
 }
 
 /// Go to another buffer.  Handles the result of the ATTENTION dialog.
@@ -1255,8 +1256,11 @@ static int do_buffer_ext(int action, int start, int dir, int count, int flags)
       buf = buf->b_next;
     }
   } else {
+    const bool help_only = (flags & DOBUF_SKIPHELP) != 0 && buf->b_help;
+
     bp = NULL;
-    while (count > 0 || (!unload && !buf->b_p_bl && bp != buf)) {
+    while (count > 0 || (bp != buf && !unload
+                         && !(help_only ? buf->b_help : buf->b_p_bl))) {
       // remember the buffer where we start, we come back there when all
       // buffers are unlisted.
       if (bp == NULL) {
@@ -1264,12 +1268,13 @@ static int do_buffer_ext(int action, int start, int dir, int count, int flags)
       }
       buf = dir == FORWARD ? (buf->b_next != NULL ? buf->b_next : firstbuf)
                            : (buf->b_prev != NULL ? buf->b_prev : lastbuf);
+      // Avoid non-help buffers if the starting point was a help buffer
+      // and vice-versa.
       // Don't count unlisted buffers.
-      // Avoid non-help buffers if the starting point was a non-help buffer and
-      // vice-versa.
       if (unload
-          || (buf->b_p_bl
-              && ((flags & DOBUF_SKIPHELP) == 0 || buf->b_help == bp->b_help))) {
+          || (help_only
+              ? buf->b_help
+              : (buf->b_p_bl && ((flags & DOBUF_SKIPHELP) == 0 || !buf->b_help)))) {
         count--;
         bp = NULL;              // use this buffer as new starting point
       }

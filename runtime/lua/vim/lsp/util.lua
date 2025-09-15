@@ -745,6 +745,10 @@ function M.convert_signature_help_to_markdown_lines(signature_help, ft, triggers
     if type(doc) == 'string' then
       signature.documentation = { kind = 'plaintext', value = doc }
     end
+    -- Add delimiter if there is documentation to display
+    if signature.documentation.value ~= '' then
+      contents[#contents + 1] = '---'
+    end
     M.convert_input_to_markdown_lines(signature.documentation, contents)
   end
   if signature.parameters and #signature.parameters > 0 then
@@ -861,7 +865,7 @@ function M.make_floating_popup_options(width, height, opts)
     col = 1
   end
 
-  local title = (opts.border and opts.title) and opts.title or nil
+  local title = ((opts.border or vim.o.winborder ~= '') and opts.title) and opts.title or nil
   local title_pos --- @type 'left'|'center'|'right'?
 
   if title then
@@ -1340,9 +1344,10 @@ end
 ---
 ---@param events table list of events
 ---@param winnr integer window id of preview window
----@param bufnrs table list of buffers where the preview window will remain visible
+---@param floating_bufnr integer floating preview buffer
+---@param bufnr integer buffer that opened the floating preview buffer
 ---@see autocmd-events
-local function close_preview_autocmd(events, winnr, bufnrs)
+local function close_preview_autocmd(events, winnr, floating_bufnr, bufnr)
   local augroup = api.nvim_create_augroup('nvim.preview_window_' .. winnr, {
     clear = true,
   })
@@ -1351,13 +1356,13 @@ local function close_preview_autocmd(events, winnr, bufnrs)
   -- the floating window buffer or the buffer that spawned it
   api.nvim_create_autocmd('BufLeave', {
     group = augroup,
-    buffer = bufnrs[1],
+    buffer = bufnr,
     callback = function()
       vim.schedule(function()
         -- When jumping to the quickfix window from the preview window,
         -- do not close the preview window.
         if api.nvim_get_option_value('filetype', { buf = 0 }) ~= 'qf' then
-          close_preview_window(winnr, bufnrs)
+          close_preview_window(winnr, { floating_bufnr, bufnr })
         end
       end)
     end,
@@ -1366,7 +1371,7 @@ local function close_preview_autocmd(events, winnr, bufnrs)
   if #events > 0 then
     api.nvim_create_autocmd(events, {
       group = augroup,
-      buffer = bufnrs[2],
+      buffer = bufnr,
       callback = function()
         close_preview_window(winnr)
       end,
@@ -1613,7 +1618,7 @@ function M.open_floating_preview(contents, syntax, opts)
       '<cmd>bdelete<cr>',
       { silent = true, noremap = true, nowait = true }
     )
-    close_preview_autocmd(opts.close_events, floating_winnr, { floating_bufnr, bufnr })
+    close_preview_autocmd(opts.close_events, floating_winnr, floating_bufnr, bufnr)
 
     -- save focus_id
     if opts.focus_id then
