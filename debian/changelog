@@ -1,3 +1,184 @@
+neovim (0.11.4-1) unstable; urgency=medium
+
+  [ Dimitry Ishenko ]
+  * Merge tag 'v0.11.4'
+
+  [ Justin M. Keyes ]
+  * NVIM v0.11.4
+
+  [ Michael Henry ]
+  * fix(health): update advice for Python #35564
+
+  [ zeertzjq ]
+  * Merge pull request #35561 from zeertzjq/backport
+  * fix(lua): report error in Lua Funcref callback properly (#35555)
+
+  [ glepnir ]
+  * docs(lsp): mention lsp/after/ in faq #35534
+
+  [ zeertzjq ]
+  * Merge pull request #35546 from zeertzjq/vim-a07a2f4
+
+  [ Meriel Luna Mittelbach ]
+  * fix(health): accept TERM=tmux-direct #35511
+
+  [ zeertzjq ]
+  * vim-patch:9.1.1700: Multiline ignorecase specific pattern does not
+    match with 'ignorecase' (#35520)
+  * vim-patch:9.1.1688: potential buffer overrun in bufwrite.c (#35497)
+  * Merge pull request #35451 from zeertzjq/backport
+  * fix(diff): set default diff flags properly (#35450)
+
+  [ Riley Bruins ]
+  * fix(treesitter): show capture-level priorities in :Inspect #35443
+
+  [ zeertzjq ]
+  * vim-patch:9.1.1667: Another outdated comment in eval.c (#35438)
+  * vim-patch:9.1.1665: Outdated comment in eval.c (#35436)
+
+  [ tao ]
+  * fix(folds): error when deleting lines at end of buffer #35396
+
+  [ zeertzjq ]
+  * vim-patch:8.2.1672: v_lock is used when it is not initialized
+    (#35416)
+
+  [ Tiago Inaba ]
+  * fix(lsp): update window title when cycling through signatures #35407
+
+  [ Sean Dewar ]
+  * fix(treesitter): run FileType autocmds in the context of `<abuf>`
+
+  [ neovim-backports[bot] ]
+  * fix(api): on_detach consistently before buf_freeall autocmds
+    (#35369)
+
+  [ neovim-backports[bot] ]
+  * refactor(tests): remove redundant test (#35368)
+
+  [ neovim-backports[bot] ]
+  * fix(api,lsp): call on_detach before wiping out the buffer #35367
+
+  [ MinimalEffort07 ]
+  * build(deps): CMake generation fails when path contains spaces #35332
+
+  [ Michael Henry ]
+  * feat(provider): detect venv python via "pynvim-python" tool #35273
+
+  [ zeertzjq ]
+  * vim-patch:9.1.1633: Search pattern shown incorrectly with negative
+    offset (#35337)
+  * vim-patch:9.1.1613: tests: test_search leaves a few swapfiles behind
+  * vim-patch:9.1.1612: Ctrl-G/Ctrl-T do not ignore the end search
+    delimiter
+
+  [ Jalil David Salamé Messina ]
+  * fix(checkhealth): wrong ABI version for treesitter parsers #35327
+
+  [ zeertzjq ]
+  * fix(api): fix not capturing output in cmdline mode (#35322)
+
+  [ Steven Xu ]
+  * fix(treesitter): inconsistent highlight of multiline combined
+    injection #35307
+
+  [ zeertzjq ]
+  * vim-patch:714671d: runtime(misc): use :hor :term to ensure new term
+    window is split horizontally (#35064)
+  * vim-patch:9.1.1611: possible undefined behaviour in mb_decompose()
+    (#35275)
+  * vim-patch:9.1.1608: No command-line completion for :unsilent
+    {command}
+  * vim-patch:9.1.0748: :keep* commmands are sometimes misidentified as
+    :k
+
+  [ brianhuster ]
+  * vim-patch:b9ea0a8: runtime(doc): tweak documentation style in
+    helphelp.txt
+  * vim-patch:5ddcecf: runtime(help): Add better support for language
+    annotation highlighting
+  * vim-patch:6fea0a5: runtime(help): Add Vim lang annotation support
+    for codeblocks
+
+  [ zeertzjq ]
+  * vim-patch:9.1.1607: :apple command detected as :append (#35237)
+
+  [ Gregory Anders ]
+  * fix(tui): do not remove SIGWINCH handler when resize events are
+    enabled (#35221) (#35238)
+
+  [ zeertzjq ]
+  * vim-patch:9.1.1601: Patch v8.1.0425 was wrong
+  * vim-patch:8.1.0425: ml_get error and crash with appendbufline()
+  * Merge pull request #35224 from zeertzjq/backport
+  * fix(ui): check for cmdline mode properly
+  * fix(pum): check for cmdline mode properly
+  * vim-patch:9.1.1599: :bnext doesn't go to unlisted help buffers
+    (#35216)
+
+  [ neovim-backports[bot] ]
+  * fix(float): cursor visible in "hidden" floating window (#35219)
+
+  [ skewb1k ]
+  * feat(lsp): improve signature help display #35190
+
+  [ glepnir ]
+  * fix(lsp): show title when global winborder is set (#35181)
+  * fix(api): nvim_create_user_command addr option should allow ranges
+    #35077
+
+  [ TheBlob42 ]
+  * fix(snippet): jumping backwards to choice node (#35062)
+  * fix(snippet): setting end_right_gravity (#35061)
+
+  [ Maria José Solano ]
+  * fix(lsp): don't override `config.title` in
+    `vim.lsp.buf.signature_help()` #35075
+
+  [ zeertzjq ]
+  * fix(cmdline): :checkhealth completion with multiple args (#35060)
+  * fix(clipboard): correct blockwise register width computation
+    (#35038)
+
+  [ glepnir ]
+  * fix(iter): ArrayIter:last returns nil when filtered to empty #34697
+
+  [ Phạm Bình An ]
+  * docs: update usr_02.txt #35031
+
+  [ Justin M. Keyes ]
+  * Merge #34986 from brianhuster/release-0.11
+
+  [ brianhuster ]
+  * fix(tutor): use legacy syntax for lesson 3.1 of vim-01-
+    beginner.tutor
+  * fix(tutor): use `invalidate` field in `nvim_buf_set_extmark()`
+  * test(tutor_spec): remove test description("Tutor: tutor")
+  * refactor(tutor): reimplement interactive marks as extmark in Lua
+
+  [ PilgrimLyieu ]
+  * docs(tutor): Chinese (zh-CN) translation #34803
+
+  [ Donatas ]
+  * fix(lsp): close floating preview window correctly #34946
+
+  [ Phạm Bình An ]
+  * revert: "fix(runtime): set 'foldmethod' for Lua ftplugin #34929"
+    (#34947)
+  * fix(runtime): set 'foldmethod' for Lua ftplugin #34929
+
+  [ Gregory Anders ]
+  * fix(lsp/health): always use vim.inspect to show root_markers
+    (#34667)
+
+  [ neovim-backports[bot] ]
+  * fix(lsp/health): ensure valid table before concatenating (#34930)
+
+  [ Justin M. Keyes ]
+  * version bump
+
+ -- Dimitry Ishenko <dimitry.ishenko@gmail.com>  Mon, 15 Sep 2025 11:27:53 -0400
+
 neovim (0.11.3-1) unstable; urgency=medium
 
   [ Dimitry Ishenko ]
